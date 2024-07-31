@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Type: String
     AllowedPattern: "[a-zA-Z0-9-]*"
-    Default: kmkm
+    Default: kmspvadv
   STAGE:
     Type: String
     AllowedValues:
