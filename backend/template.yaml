@@ -66,10 +66,10 @@ Resources:
           USERTABLE: "m_user"
           SESSIONTABLE: "t_session"
 
-  Session1Function:
+  Session2Function:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "${ProjectName}-${STAGE}-session1-function"
+      FunctionName: !Sub "${ProjectName}-${STAGE}-session2-function"
       Handler: session.lambda_handler
       Role: !GetAtt LambdaSessionRole.Arn
       CodeUri: src/lambdas/functions/session
