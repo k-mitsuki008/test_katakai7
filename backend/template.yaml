@@ -65,3 +65,15 @@ Resources:
         Variables:
           USERTABLE: "m_user"
           SESSIONTABLE: "t_session"
+
+  Session1Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${ProjectName}-${STAGE}-session1-function"
+      Handler: session.lambda_handler
+      Role: !GetAtt LambdaSessionRole.Arn
+      CodeUri: src/lambdas/functions/session
+      Environment:
+        Variables:
+          USERTABLE: "m_user"
+          SESSIONTABLE: "t_session"
