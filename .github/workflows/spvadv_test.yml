@@ -1,0 +1,16 @@
+
+name: Run CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: something test1
+        run: exit 0

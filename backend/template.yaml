@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+
+Parameters:
+  ProjectName:
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]*"
+    Default: kmkm
+  STAGE:
+    Type: String
+    AllowedValues:
+      - dev
+      - poc
+      - stg
+      - prd
+    Default: dev
+
+Globals:
+  Function:
+    Runtime: python3.9
+    Timeout: 30
+    MemorySize: 1024
+    Architectures:
+      - arm64
+
+Resources:
+#########################
+#        Lambda         #
+#########################
+# IAM Role
+# ログイン関数他
+  LambdaSessionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ProjectName}-${STAGE}-session-lambda-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      Policies:
+        - PolicyName: DefaultLambdaPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: logs:*
+                Resource: "*"
+
+# ログイン関数  
+  SessionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${ProjectName}-${STAGE}-session-function"
+      Handler: session.lambda_handler
+      Role: !GetAtt LambdaSessionRole.Arn
+      CodeUri: src/lambdas/functions/session
+      Environment:
+        Variables:
+          USERTABLE: "m_user"
+          SESSIONTABLE: "t_session"
