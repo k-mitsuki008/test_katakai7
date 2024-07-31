@@ -22,14 +22,14 @@ jobs:
         if: ${{ github.ref_name == 'main'}}
         run: |
           echo 'STAGE=poc' >> $GITHUB_ENV
-          echo 'REGION=eu-west-3' >> $GITHUB_ENV
+          echo 'REGION=eu-west-1' >> $GITHUB_ENV
           echo 'ROLE_ARN=arn:aws:iam::850854818590:role/poc-spvadv-github-actions-role' >> $GITHUB_ENV
 
       - name: Setting variable(case develop)
         if: ${{ github.ref_name == 'develop'}}
         run: |
           echo 'STAGE=dev' >> $GITHUB_ENV
-          echo 'REGION=eu-west-2' >> $GITHUB_ENV
+          echo 'REGION=eu-central-1' >> $GITHUB_ENV
           echo 'ROLE_ARN=arn:aws:iam::850854818590:role/dev-spvadv-github-actions-role' >> $GITHUB_ENV
 
       - name: Set up Python
@@ -45,10 +45,9 @@ jobs:
         with:
           role-to-assume: ${{ env.ROLE_ARN }}
           aws-region: ${{ env.REGION }}
-      
-      # GitHubリポジトリ移行後にコメントアウトを外す
-      # - name: Build and deploy SAM application
-      #   run: |
-      #     cd backend/
-      #     sam build --config-env ${{ env.STAGE }}
-      #     sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --config-env ${{ env.STAGE }}
+
+      - name: Build and deploy SAM application
+        run: |
+          cd backend/
+          sam build --config-env ${{ env.STAGE }}
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --config-env ${{ env.STAGE }}
