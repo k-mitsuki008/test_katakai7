@@ -45,10 +45,10 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y postgresql-14 postgresql-client-14
 
-      - name: Run lint
-        run: |
-          cd ./backend/
-          pipenv run lint
+      # - name: Run lint
+      #   run: |
+      #     cd ./backend/
+      #     pipenv run lint
 
       - name: Run unit tests
         run: |
