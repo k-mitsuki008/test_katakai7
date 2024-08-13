@@ -1,0 +1,891 @@
+[MAIN]
+
+# Analyse import fallback blocks. This can be used to support both Python 2 and
+# 3 compatible code, which means that the block might have code that exists
+# only in one or another interpreter, leading to false positives when analysed.
+analyse-fallback-blocks=no
+
+# Load and enable all available extensions. Use --list-extensions to see a list
+# all available extensions.
+#enable-all-extensions=
+
+# In error mode, messages with a category besides ERROR or FATAL are
+# suppressed, and no reports are done by default. Error mode is compatible with
+# disabling specific errors.
+#errors-only=
+
+# Always return a 0 (non-error) status code, even if lint errors are found.
+# This is primarily useful in continuous integration scripts.
+#exit-zero=
+
+# A comma-separated list of package or module names from where C extensions may
+# be loaded. Extensions are loading into the active Python interpreter and may
+# run arbitrary code.
+extension-pkg-allow-list=
+
+# A comma-separated list of package or module names from where C extensions may
+# be loaded. Extensions are loading into the active Python interpreter and may
+# run arbitrary code. (This is an alternative name to extension-pkg-allow-list
+# for backward compatibility.)
+extension-pkg-whitelist=
+
+# Return non-zero exit code if any of these messages/categories are detected,
+# even if score is above --fail-under value. Syntax same as enable. Messages
+# specified are enabled, while categories only check already-enabled messages.
+fail-on=
+
+# Specify a score threshold under which the program will exit with error.
+fail-under=10
+
+# Interpret the stdin as a python script, whose filename needs to be passed as
+# the module_or_package argument.
+#from-stdin=
+
+# Files or directories to be skipped. They should be base names, not paths.
+ignore=gigya
+
+# Add files or directories matching the regular expressions patterns to the
+# ignore-list. The regex matches against paths and can be in Posix or Windows
+# format. Because '\' represents the directory delimiter on Windows systems, it
+# can't be used as an escape character.
+ignore-paths=
+       src/__init__.py,
+       src/batch_functions/__init__.py,
+       src/batch_functions/app_version_check/__init__.py,
+       src/batch_functions/app_version_check/handler.py,
+       src/batch_functions/files_deletion/__init__.py,
+       src/batch_functions/files_deletion/delete_files_handler.py,
+       src/batch_functions/files_deletion/get_list_handler.py,
+       src/batch_functions/maintenance_notification/__init__.py,
+       src/batch_functions/maintenance_notification/get_list_handler.py,
+       src/batch_functions/maintenance_notification/request_notifications_handler.py,
+       src/functions/__init__.py,
+       src/functions/bluetooth_unexpected_data/__init__.py,
+       src/functions/bluetooth_unexpected_data/post_handler.py,
+       src/functions/device/__init__.py,
+       src/functions/device/post_handler.py,
+       src/functions/insert_dynamodb/handler.py,
+       src/functions/insert_dynamodb/m_constant.json,
+       src/functions/insert_dynamodb/m_message.json,
+       src/functions/maintenances/__init__.py,
+       src/functions/maintenances/get_handler.py,
+       src/functions/ride_detail/__init__.py,
+       src/functions/ride_detail/delete_handler.py,
+       src/functions/ride_detail/get_handler.py,
+       src/functions/ride_detail/put_handler.py,
+       src/functions/rides/__init__.py,
+       src/functions/rides/get_handler.py,
+       src/functions/rides/post_handler.py,
+       src/functions/upload_urls/__init__.py,
+       src/functions/upload_urls/get_handler.py,
+       src/functions/user/__init__.py,
+       src/functions/user/delete_handler.py,
+       src/functions/user/post_handler.py,
+       src/functions/user/put_handler.py,
+       src/functions/user_setting/__init__.py,
+       src/functions/user_setting/get_handler.py,
+       src/functions/users_settings_shop/__init__.py,
+       src/functions/users_settings_shop/post_handler.py,
+       src/functions/users_settings_user_ride/__init__.py,
+       src/functions/users_settings_user_ride/put_handler.py,
+       src/functions/vehicles_bluetooth/__init__.py,
+       src/functions/vehicles_bluetooth/post_handler.py,
+       src/functions/vehicles_maintenance_setting/__init__.py,
+       src/functions/vehicles_maintenance_setting/post_handler.py,
+       src/functions/vehicles_maintenances/__init__.py,
+       src/functions/vehicles_maintenances/get_handler.py,
+       src/functions/vehicles_maintenances_histories/__init__.py,
+       src/functions/vehicles_maintenances_histories/get_handler.py,
+       src/functions/vehicles_maintenances_histories_detail/__init__.py,
+       src/functions/vehicles_maintenances_histories_detail/delete_handler.py,
+       src/functions/vehicles_maintenances_histories_detail/get_handler.py,
+       src/functions/vehicles_maintenances_histories_detail/post_handler.py,
+       src/functions/vehicles_maintenances_histories_detail/put_handler.py,
+       src/functions/vehicles_shop/__init__.py,
+       src/functions/vehicles_shop/post_handler.py,
+       src/layers/__init__.py,
+       src/layers/common/__init__.py,
+       src/layers/common/python/__init__.py,
+       src/layers/common/python/common/__init__.py,
+       src/layers/common/python/common/aws/__init__.py,
+       src/layers/common/python/common/aws/dynamodb.py,
+       src/layers/common/python/common/cerberus/__init__.py,
+       src/layers/common/python/common/cerberus/core.py,
+       src/layers/common/python/common/cerberus/custom_rules.py,
+       src/layers/common/python/common/cerberus/custom_validator.py,
+       src/layers/common/python/common/cerberus/setting/__init__.py,
+       src/layers/common/python/common/cerberus/setting/basic_rules.py,
+       src/layers/common/python/common/cerberus/setting/messages.py,
+       src/layers/common/python/common/decorator/__init__.py,
+       src/layers/common/python/common/decorator/default_api.py,
+       src/layers/common/python/common/decorator/default_batch.py,
+       src/layers/common/python/common/decorator/service.py,
+       src/layers/common/python/common/error/__init__.py,
+       src/layers/common/python/common/error/authorized_error.py,
+       src/layers/common/python/common/error/business_error.py,
+       src/layers/common/python/common/error/custom_error.py,
+       src/layers/common/python/common/error/db_access_error.py,
+       src/layers/common/python/common/error/dynamo_db_access_error.py,
+       src/layers/common/python/common/error/not_expected_error.py,
+       src/layers/common/python/common/error/old_app_version_error.py,
+       src/layers/common/python/common/error/s3_access_error.py,
+       src/layers/common/python/common/logger.py,
+       src/layers/common/python/common/rds/__init__.py,
+       src/layers/common/python/common/rds/connect.py,
+       src/layers/common/python/common/rds/core.py,
+       src/layers/common/python/common/rds/transactional.py,
+       src/layers/common/python/common/response.py,
+       src/layers/common/python/common/stack_trace.py,
+       src/layers/common/python/common/utils/aws_utils.py,
+       src/layers/common/python/common/utils/request_headers_utils.py,
+       src/layers/common/python/common/utils/time_utils.py,
+       src/layers/common/python/requirements.txt,
+       src/layers/repository/__init__.py,
+       src/layers/repository/python/__init__.py,
+       src/layers/repository/python/repository/__init__.py,
+       src/layers/repository/python/repository/app_version_repository.py,
+       src/layers/repository/python/repository/device_repository.py,
+       src/layers/repository/python/repository/drive_unit_history_repository.py,
+       src/layers/repository/python/repository/maintain_history_repository.py,
+       src/layers/repository/python/repository/maintain_item_repository.py,
+       src/layers/repository/python/repository/ride_history_repository.py,
+       src/layers/repository/python/repository/ride_track_repository.py,
+       src/layers/repository/python/repository/session_repository.py,
+       src/layers/repository/python/repository/user_setting_maintain_item_repository.py,
+       src/layers/repository/python/repository/user_setting_maintain_repository.py,
+       src/layers/repository/python/repository/user_setting_repository.py,
+       src/layers/repository/python/repository/user_setting_ride_repository.py,
+       src/layers/repository/python/repository/user_shop_purchase_repository.py,
+       src/layers/repository/python/repository/user_shop_regular_repository.py,
+       src/layers/repository/python/repository/user_vehicle_repository.py,
+       src/layers/repository/python/repository/utils/__init__.py,
+       src/layers/repository/python/repository/utils/repository_utils.py,
+       src/layers/service/__init__.py,
+       src/layers/service/python/__init__.py,
+       src/layers/service/python/service/__init__.py,
+       src/layers/service/python/service/app_version_info_service.py,
+       src/layers/service/python/service/bluetooth_unexpected_data_service.py,
+       src/layers/service/python/service/delete_file_service.py,
+       src/layers/service/python/service/device_service.py,
+       src/layers/service/python/service/drive_unit_history_service.py,
+       src/layers/service/python/service/maintain_history_service.py,
+       src/layers/service/python/service/maintain_item_service.py,
+       src/layers/service/python/service/maintenance_notification_service.py,
+       src/layers/service/python/service/ride_history_service.py,
+       src/layers/service/python/service/ride_track_service.py,
+       src/layers/service/python/service/session_service.py,
+       src/layers/service/python/service/upload_file_service.py,
+       src/layers/service/python/service/user_setting_maintain_service.py,
+       src/layers/service/python/service/user_setting_ride_service.py,
+       src/layers/service/python/service/user_setting_service.py,
+       src/layers/service/python/service/user_shop_purchase_service.py,
+       src/layers/service/python/service/user_shop_regular_service.py,
+       src/layers/service/python/service/user_vehicle_service.py,
+       tests/__init__.py,
+       tests/batch_functions/__init__.py,
+       tests/batch_functions/app_version_check/__init__.py,
+       tests/batch_functions/app_version_check/test_handler.py,
+       tests/batch_functions/files_deletion/__init__.py,
+       tests/batch_functions/files_deletion/test_delete_files_handler.py,
+       tests/batch_functions/files_deletion/test_get_list_handler.py,
+       tests/batch_functions/maintenance_notification/__init__.py,
+       tests/batch_functions/maintenance_notification/test_get_list_handler.py,
+       tests/batch_functions/maintenance_notification/test_request_notifications_handler.py,
+       tests/conftest.py,
+       tests/create_tables.sh,
+       tests/functions/__init__.py,
+       tests/functions/authorizer/__init__.py,
+       tests/functions/authorizer/test_handler.py,
+       tests/functions/bluetooth_unexpected_data/__init__.py,
+       tests/functions/bluetooth_unexpected_data/test_post_handler.py,
+       tests/functions/device/__init__.py,
+       tests/functions/device/test_post_handler.py,
+       tests/functions/logout/__init__.py,
+       tests/functions/logout/test_post_handler.py,
+       tests/functions/maintenances/test_get_handler.py,
+       tests/functions/ride_detail/__init__.py,
+       tests/functions/ride_detail/test_delete_handler.py,
+       tests/functions/ride_detail/test_get_handler.py,
+       tests/functions/ride_detail/test_put_handler.py,
+       tests/functions/rides/__init__.py,
+       tests/functions/rides/test_get_handler.py,
+       tests/functions/rides/test_post_handler.py,
+       tests/functions/upload_urls/__init__.py,
+       tests/functions/upload_urls/test_get_handler.py,
+       tests/functions/user_setting/__init__.py,
+       tests/functions/user_setting/test_get_handler.py,
+       tests/functions/users_settings_shop/__init__.py,
+       tests/functions/users_settings_shop/test_post_handler.py,
+       tests/functions/users_settings_user_ride/__init__.py,
+       tests/functions/users_settings_user_ride/test_put_handler.py,
+       tests/functions/vehicles/__init__.py,
+       tests/functions/vehicles/test_delete_handler.py,
+       tests/functions/vehicles/test_get_handler.py,
+       tests/functions/vehicles/test_post_handler.py,
+       tests/functions/vehicles/test_put_handler.py,
+       tests/functions/vehicles_bluetooth/__init__.py,
+       tests/functions/vehicles_bluetooth/test_post_handler.py,
+       tests/functions/vehicles_maintenance_setting/__init__.py,
+       tests/functions/vehicles_maintenance_setting/test_post_handler.py,
+       tests/functions/vehicles_maintenances/__init__.py,
+       tests/functions/vehicles_maintenances/test_get_handler.py,
+       tests/functions/vehicles_maintenances_histories/__init__.py,
+       tests/functions/vehicles_maintenances_histories/test_get_handler.py,
+       tests/functions/vehicles_maintenances_histories_detail/__init__.py,
+       tests/functions/vehicles_maintenances_histories_detail/test_delete_handler.py,
+       tests/functions/vehicles_maintenances_histories_detail/test_get_handler.py,
+       tests/functions/vehicles_maintenances_histories_detail/test_post_handler.py,
+       tests/functions/vehicles_maintenances_histories_detail/test_put_handler.py,
+       tests/functions/vehicles_shop/__init__.py,
+       tests/functions/vehicles_shop/test_post_handler.py,
+       tests/layers/__init__.py,
+       tests/layers/common/__init__.py,
+       tests/layers/common/common/__init__.py,
+       tests/layers/common/common/aws/test_dynamodb.py,
+       tests/layers/common/common/cerberus/setting/__init__.py,
+       tests/layers/common/common/cerberus/setting/test_basic_rules.py,
+       tests/layers/common/common/cerberus/test_core.py,
+       tests/layers/common/common/cerberus/test_custom_rules.py,
+       tests/layers/common/common/decorator/__init__.py,
+       tests/layers/common/common/decorator/test_default_api.py,
+       tests/layers/common/common/decorator/test_default_batch.py,
+       tests/layers/common/common/decorator/test_service.py,
+       tests/layers/common/common/error/test_authorized_error.py,
+       tests/layers/common/common/error/test_business_error.py,
+       tests/layers/common/common/error/test_custom_error.py,
+       tests/layers/common/common/error/test_db_access_error.py,
+       tests/layers/common/common/error/test_dynamo_db_access_error.py,
+       tests/layers/common/common/error/test_not_expected_error.py,
+       tests/layers/common/common/error/test_old_app_version_error.py,
+       tests/layers/common/common/error/test_s3_access_error.py,
+       tests/layers/common/common/rds/__init__.py,
+       tests/layers/common/common/rds/test_connect.py,
+       tests/layers/common/common/rds/test_core.py,
+       tests/layers/common/common/rds/test_transactional.py,
+       tests/layers/common/common/test_logger.py,
+       tests/layers/common/common/test_response.py,
+       tests/layers/common/common/test_stack_trace.py,
+       tests/layers/common/common/utils/__init__.py,
+       tests/layers/common/common/utils/test_aws_utils.py,
+       tests/layers/common/common/utils/test_request_headers_utils.py,
+       tests/layers/common/common/utils/test_time_utils.py,
+       tests/layers/repository/__init__.py,
+       tests/layers/repository/test_app_version_repository.py,
+       tests/layers/repository/test_device_repository.py,
+       tests/layers/repository/test_drive_unit_history_repository.py,
+       tests/layers/repository/test_maintain_history_repository.py,
+       tests/layers/repository/test_maintain_item_repository.py,
+       tests/layers/repository/test_ride_history_repository.py,
+       tests/layers/repository/test_ride_track_repository.py,
+       tests/layers/repository/test_session_repository.py,
+       tests/layers/repository/test_user_setting_maintain.py,
+       tests/layers/repository/test_user_setting_maintain_item.py,
+       tests/layers/repository/test_user_setting_maintain_repository.py,
+       tests/layers/repository/test_user_setting_repository.py,
+       tests/layers/repository/test_user_setting_ride_repository.py,
+       tests/layers/repository/test_user_shop_purchase_repository.py,
+       tests/layers/repository/test_user_shop_regular_repository.py,
+       tests/layers/repository/test_user_vehicle_repository.py,
+       tests/layers/repository/utils/__init__.py,
+       tests/layers/repository/utils/test_repository_utils.py,
+       tests/layers/service/__init__.py,
+       tests/layers/service/test_app_version_info_service.py,
+       tests/layers/service/test_bluetooth_unexpected_data_service.py,
+       tests/layers/service/test_delete_file_service.py,
+       tests/layers/service/test_device_service.py,
+       tests/layers/service/test_drive_unit_history_service.py,
+       tests/layers/service/test_maintain_history_service.py,
+       tests/layers/service/test_maintain_item_service.py,
+       tests/layers/service/test_maintenance_notification_service.py,
+       tests/layers/service/test_ride_history_service.py,
+       tests/layers/service/test_ride_track_service.py,
+       tests/layers/service/test_session_service.py,
+       tests/layers/service/test_upload_file_service.py,
+       tests/layers/service/test_user_setting_maintain_service.py,
+       tests/layers/service/test_user_setting_ride_service.py,
+       tests/layers/service/test_user_setting_service.py,
+       tests/layers/service/test_user_shop_purchase_service.py,
+       tests/layers/service/test_user_shop_regular_service.py,
+       tests/layers/service/test_user_vehicle_service.py,
+       tests/test_utils/__init__.py,
+       tests/test_utils/fixtures.py,
+       tests/test_utils/utils.py,
+
+# Files or directories matching the regular expression patterns are skipped.
+# The regex matches against base names, not paths. The default value ignores
+# Emacs file locks
+ignore-patterns=^\.#
+
+# List of module names for which member attributes should not be checked
+# (useful for modules/projects where namespaces are manipulated during runtime
+# and thus existing member attributes cannot be deduced by static analysis). It
+# supports qualified module names, as well as Unix pattern matching.
+ignored-modules=
+
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+#init-hook=
+
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use, and will cap the count on Windows to
+# avoid hangs.
+jobs=1
+
+# Control the amount of potential inferred values when inferring a single
+# object. This can help the performance when dealing with large functions or
+# complex, nested conditions.
+limit-inference-results=100
+
+# List of plugins (as comma separated values of python module names) to load,
+# usually to register additional checkers.
+load-plugins=pylint_junit
+
+# Pickle collected data for later comparisons.
+persistent=yes
+
+# Minimum Python version to use for version dependent checks. Will default to
+# the version used to run pylint.
+py-version=3.9
+
+# Discover python modules and packages in the file system subtree.
+recursive=yes
+
+# When enabled, pylint would attempt to guess common misconfiguration and emit
+# user-friendly hints instead of false-positive error messages.
+suggestion-mode=yes
+
+# Allow loading of arbitrary C extensions. Extensions are imported into the
+# active Python interpreter and may run arbitrary code.
+unsafe-load-any-extension=no
+
+# In verbose mode, extra non-checker-related info will be displayed.
+#verbose=
+
+
+[BASIC]
+
+# Naming style matching correct argument names.
+argument-naming-style=snake_case
+
+# Regular expression matching correct argument names. Overrides argument-
+# naming-style. If left empty, argument names will be checked with the set
+# naming style.
+#argument-rgx=
+
+# Naming style matching correct attribute names.
+attr-naming-style=snake_case
+
+# Regular expression matching correct attribute names. Overrides attr-naming-
+# style. If left empty, attribute names will be checked with the set naming
+# style.
+#attr-rgx=
+
+# Bad variable names which should always be refused, separated by a comma.
+bad-names=foo,
+          bar,
+          baz,
+          toto,
+          tutu,
+          tata,
+          hoge,
+          fuga
+
+# Bad variable names regexes, separated by a comma. If names match any regex,
+# they will always be refused
+bad-names-rgxs=
+
+# Naming style matching correct class attribute names.
+class-attribute-naming-style=any
+
+# Regular expression matching correct class attribute names. Overrides class-
+# attribute-naming-style. If left empty, class attribute names will be checked
+# with the set naming style.
+#class-attribute-rgx=
+
+# Naming style matching correct class constant names.
+class-const-naming-style=UPPER_CASE
+
+# Regular expression matching correct class constant names. Overrides class-
+# const-naming-style. If left empty, class constant names will be checked with
+# the set naming style.
+#class-const-rgx=
+
+# Naming style matching correct class names.
+class-naming-style=PascalCase
+
+# Regular expression matching correct class names. Overrides class-naming-
+# style. If left empty, class names will be checked with the set naming style.
+#class-rgx=
+
+# Naming style matching correct constant names.
+const-naming-style=UPPER_CASE
+
+# Regular expression matching correct constant names. Overrides const-naming-
+# style. If left empty, constant names will be checked with the set naming
+# style.
+#const-rgx=
+
+# Minimum line length for functions/classes that require docstrings, shorter
+# ones are exempt.
+docstring-min-length=-1
+
+# Naming style matching correct function names.
+function-naming-style=snake_case
+
+# Regular expression matching correct function names. Overrides function-
+# naming-style. If left empty, function names will be checked with the set
+# naming style.
+#function-rgx=
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=i,
+           j,
+           k,
+           ex,
+           e,  # e or exのどちらかに合わせるべきと思うが一旦両方good-namesに入れておく。
+           Run,
+           _,
+           dc,
+           s3,
+           v,
+           m,  # mockerのmの想定
+           x
+
+# Good variable names regexes, separated by a comma. If names match any regex,
+# they will always be accepted
+good-names-rgxs=
+
+# Include a hint for the correct naming format with invalid-name.
+include-naming-hint=no
+
+# Naming style matching correct inline iteration names.
+inlinevar-naming-style=any
+
+# Regular expression matching correct inline iteration names. Overrides
+# inlinevar-naming-style. If left empty, inline iteration names will be checked
+# with the set naming style.
+#inlinevar-rgx=
+
+# Naming style matching correct method names.
+method-naming-style=snake_case
+
+# Regular expression matching correct method names. Overrides method-naming-
+# style. If left empty, method names will be checked with the set naming style.
+#method-rgx=
+
+# Naming style matching correct module names.
+module-naming-style=snake_case
+
+# Regular expression matching correct module names. Overrides module-naming-
+# style. If left empty, module names will be checked with the set naming style.
+#module-rgx=
+
+# Colon-delimited sets of names that determine each other's naming style when
+# the name regexes allow several styles.
+name-group=
+
+# Regular expression which should only match function or class names that do
+# not require a docstring.
+no-docstring-rgx=^_
+
+# List of decorators that produce properties, such as abc.abstractproperty. Add
+# to this list to register other decorators that produce valid properties.
+# These decorators are taken in consideration only for invalid-name.
+property-classes=abc.abstractproperty
+
+# Regular expression matching correct type variable names. If left empty, type
+# variable names will be checked with the set naming style.
+#typevar-rgx=
+
+# Naming style matching correct variable names.
+variable-naming-style=snake_case
+
+# Regular expression matching correct variable names. Overrides variable-
+# naming-style. If left empty, variable names will be checked with the set
+# naming style.
+#variable-rgx=
+
+
+[CLASSES]
+
+# Warn about protected attribute access inside special methods
+check-protected-access-in-special-methods=no
+
+# List of method names used to declare (i.e. assign) instance attributes.
+defining-attr-methods=__init__,
+                      __new__,
+                      setUp,
+                      __post_init__
+
+# List of member names, which should be excluded from the protected access
+# warning.
+exclude-protected=_asdict,
+                  _fields,
+                  _replace,
+                  _source,
+                  _make
+
+# List of valid names for the first argument in a class method.
+valid-classmethod-first-arg=cls
+
+# List of valid names for the first argument in a metaclass class method.
+valid-metaclass-classmethod-first-arg=cls
+
+
+[DESIGN]
+
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
+exclude-too-few-public-methods=
+
+# List of qualified class names to ignore when counting class parents (see
+# R0901)
+ignored-parents=
+
+# Maximum number of arguments for function / method.
+max-args=5
+
+# Maximum number of attributes for a class (see R0902).
+max-attributes=7
+
+# Maximum number of boolean expressions in an if statement (see R0916).
+max-bool-expr=5
+
+# Maximum number of branch for function / method body.
+max-branches=12
+
+# Maximum number of locals for function / method body.
+max-locals=15
+
+# Maximum number of parents for a class (see R0901).
+max-parents=7
+
+# Maximum number of public methods for a class (see R0904).
+max-public-methods=20
+
+# Maximum number of return / yield for function / method body.
+max-returns=6
+
+# Maximum number of statements in function / method body.
+max-statements=50
+
+# Minimum number of public methods for a class (see R0903).
+min-public-methods=2
+
+
+[EXCEPTIONS]
+
+# Exceptions that will emit a warning when caught.
+overgeneral-exceptions=builtins.BaseException,
+                       builtins.Exception
+
+
+[FORMAT]
+
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format=
+
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren=4
+
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
+# tab).
+indent-string='    '
+
+# Maximum number of characters on a single line.
+max-line-length=120
+
+# Maximum number of lines in a module.
+# lintの無効化が出来ないため設定変更で対応
+max-module-lines=2000
+
+# Allow the body of a class to be on the same line as the declaration if body
+# contains single statement.
+single-line-class-stmt=no
+
+# Allow the body of an if to be on the same line as the test if there is no
+# else.
+single-line-if-stmt=no
+
+
+[IMPORTS]
+
+# List of modules that can be imported at any level, not just the top level
+# one.
+allow-any-import-level=
+
+# Allow wildcard imports from modules that define __all__.
+allow-wildcard-with-all=no
+
+# Deprecated modules which should not be used, separated by a comma.
+deprecated-modules=
+
+# Output a graph (.gv or any supported image format) of external dependencies
+# to the given file (report RP0402 must not be disabled).
+ext-import-graph=
+
+# Output a graph (.gv or any supported image format) of all (i.e. internal and
+# external) dependencies to the given file (report RP0402 must not be
+# disabled).
+import-graph=
+
+# Output a graph (.gv or any supported image format) of internal dependencies
+# to the given file (report RP0402 must not be disabled).
+int-import-graph=
+
+# Force import order to recognize a module as part of the standard
+# compatibility libraries.
+known-standard-library=
+
+# Force import order to recognize a module as part of a third party library.
+known-third-party=enchant
+
+# Couples of modules and preferred modules, separated by a comma.
+preferred-modules=
+
+
+[LOGGING]
+
+# The type of string formatting that logging methods do. `old` means using %
+# formatting, `new` is for `{}` formatting.
+logging-format-style=old
+
+# Logging modules to check that the string format arguments are in logging
+# function parameter format.
+logging-modules=logging
+
+
+[MESSAGES CONTROL]
+
+# Only show warnings with the listed confidence levels. Leave empty to show
+# all. Valid levels: HIGH, CONTROL_FLOW, INFERENCE, INFERENCE_FAILURE,
+# UNDEFINED.
+confidence=HIGH,
+           CONTROL_FLOW,
+           INFERENCE,
+           INFERENCE_FAILURE,
+           UNDEFINED
+
+# Disable the message, report, category or checker with the given id(s). You
+# can either give multiple identifiers separated by comma (,) or put this
+# option multiple times (only on the command line, not in the configuration
+# file where it should appear only once). You can also use "--disable=all" to
+# disable everything first and then re-enable specific checks. For example, if
+# you want to run only the similarities checker, you can use "--disable=all
+# --enable=similarities". If you want to run only the classes checker, but have
+# no Warning level messages displayed, use "--disable=all --enable=classes
+# --disable=W".
+disable=raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        missing-function-docstring,
+        missing-module-docstring,
+        missing-class-docstring,
+
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where
+# it should appear only once). See also the "--disable" option for examples.
+enable=c-extension-no-member
+
+
+[METHOD_ARGS]
+
+# List of qualified names (i.e., library.method) which require a timeout
+# parameter e.g. 'requests.api.get,requests.api.post'
+timeout-methods=requests.api.delete,requests.api.get,requests.api.head,requests.api.options,requests.api.patch,requests.api.post,requests.api.put,requests.api.request
+
+
+[MISCELLANEOUS]
+
+# List of note tags to take in consideration, separated by a comma.
+notes=FIXME,
+      XXX,
+      TODO
+
+# Regular expression of note tags to take in consideration.
+notes-rgx=
+
+
+[REFACTORING]
+
+# Maximum number of nested blocks for function / method body
+max-nested-blocks=5
+
+# Complete name of functions that never returns. When checking for
+# inconsistent-return-statements if a never returning function is called then
+# it will be considered as an explicit return statement and no message will be
+# printed.
+never-returning-functions=sys.exit,argparse.parse_error
+
+
+[REPORTS]
+
+# Python expression which should return a score less than or equal to 10. You
+# have access to the variables 'fatal', 'error', 'warning', 'refactor',
+# 'convention', and 'info' which contain the number of messages in each
+# category, as well as 'statement' which is the total number of statements
+# analyzed. This score is used by the global evaluation report (RP0004).
+evaluation=max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10))
+
+# Template used to display messages. This is a python new-style format string
+# used to format the message information. See doc for all details.
+msg-template=
+
+# Set the output format. Available formats are text, parseable, colorized, json
+# and msvs (visual studio). You can also give a reporter class, e.g.
+# mypackage.mymodule.MyReporterClass.
+# output-format=junit
+
+# Tells whether to display a full report or only the messages.
+reports=yes
+
+# Activate the evaluation score.
+score=yes
+
+
+[SIMILARITIES]
+
+# Comments are removed from the similarity computation
+ignore-comments=yes
+
+# Docstrings are removed from the similarity computation
+ignore-docstrings=yes
+
+# Imports are removed from the similarity computation
+ignore-imports=yes
+
+# Signatures are removed from the similarity computation
+ignore-signatures=yes
+
+# Minimum lines number of a similarity.
+min-similarity-lines=4
+
+
+[SPELLING]
+
+# Limits count of emitted suggestions for spelling mistakes.
+max-spelling-suggestions=4
+
+# Spelling dictionary name. Available dictionaries: none. To make it work,
+# install the 'python-enchant' package.
+spelling-dict=
+
+# List of comma separated words that should be considered directives if they
+# appear at the beginning of a comment and should not be checked.
+spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+
+# List of comma separated words that should not be checked.
+spelling-ignore-words=
+
+# A path to a file that contains the private dictionary; one word per line.
+spelling-private-dict-file=
+
+# Tells whether to store unknown words to the private dictionary (see the
+# --spelling-private-dict-file option) instead of raising a message.
+spelling-store-unknown-words=no
+
+
+[STRING]
+
+# This flag controls whether inconsistent-quotes generates a warning when the
+# character used as a quote delimiter is used inconsistently within a module.
+check-quote-consistency=no
+
+# This flag controls whether the implicit-str-concat should generate a warning
+# on implicit string concatenation in sequences defined over several lines.
+check-str-concat-over-line-jumps=no
+
+
+[TYPECHECK]
+
+# List of decorators that produce context managers, such as
+# contextlib.contextmanager. Add to this list to register other decorators that
+# produce valid context managers.
+contextmanager-decorators=contextlib.contextmanager
+
+# List of members which are set dynamically and missed by pylint inference
+# system, and so shouldn't trigger E1101 when accessed. Python regular
+# expressions are accepted.
+generated-members=
+
+# Tells whether to warn about missing members when the owner of the attribute
+# is inferred to be None.
+ignore-none=yes
+
+# This flag controls whether pylint should warn about no-member and similar
+# checks whenever an opaque object is returned when inferring. The inference
+# can return multiple potential results while evaluating a Python object, but
+# some branches might not be evaluated, which results in partial inference. In
+# that case, it might be useful to still emit no-member and other checks for
+# the rest of the inferred objects.
+ignore-on-opaque-inference=yes
+
+# List of symbolic message names to ignore for Mixin members.
+ignored-checks-for-mixins=no-member,
+                          not-async-context-manager,
+                          not-context-manager,
+                          attribute-defined-outside-init
+
+# List of class names for which member attributes should not be checked (useful
+# for classes with dynamically set attributes). This supports the use of
+# qualified names.
+ignored-classes=optparse.Values,thread._local,_thread._local,argparse.Namespace
+
+# Show a hint with possible names when a member name was not found. The aspect
+# of finding the hint is based on edit distance.
+missing-member-hint=yes
+
+# The minimum edit distance a name should have in order to be considered a
+# similar match for a missing member name.
+missing-member-hint-distance=1
+
+# The total number of similar names that should be taken in consideration when
+# showing a hint for a missing member.
+missing-member-max-choices=1
+
+# Regex pattern to define which classes are considered mixins.
+mixin-class-rgx=.*[Mm]ixin
+
+# List of decorators that change the signature of a decorated function.
+signature-mutators=
+
+
+[VARIABLES]
+
+# List of additional names supposed to be defined in builtins. Remember that
+# you should avoid defining new builtins when possible.
+additional-builtins=
+
+# Tells whether unused global variables should be treated as a violation.
+allow-global-unused-variables=yes
+
+# List of names allowed to shadow builtins
+allowed-redefined-builtins=
+
+# List of strings which can identify a callback function by name. A callback
+# name must start or end with one of those strings.
+callbacks=cb_,
+          _cb
+
+# A regular expression matching the name of dummy variables (i.e. expected to
+# not be used).
+dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+
+# Argument names that match this expression will be ignored.
+ignored-argument-names=_.*|^ignored_|^unused_
+
+# Tells whether we should check for unused import in __init__ files.
+init-import=no
+
+# List of qualified module names which can have objects that can redefine
+# builtins.
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
