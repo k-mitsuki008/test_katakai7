@@ -53,9 +53,7 @@ jobs:
       - name: Run unit tests
         run: |
           cd ./backend/
-          echo ${{ secrets.DOCKERHUB_TOKEN }}
-          echo ${{ secrets.DOCKERHUB_USER }}
-          # echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
           export AWS_DEFAULT_REGION=${{ env.REGION }}
           echo 'REGION is set to:'
           echo ${{ env.REGION }}
