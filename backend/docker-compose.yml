@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  # PostgreSQL
+  db:
+    container_name: spvc-postgresql
+    image: postgis/postgis:14-3.4-alpine
+    platform: linux/amd64
+    ports:
+      - 15432:5432
+    volumes:
+      - ./postgres_local/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: spvc_admin
+      PGPASSWORD: spvc_root
+      POSTGRES_DB: spvc_local
+      TZ: "Asia/Tokyo"
+    restart: always

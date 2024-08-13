@@ -1,79 +1,1253 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 
 Parameters:
-  ProjectName:
-    Type: String
-    AllowedPattern: "[a-zA-Z0-9-]*"
-    Default: kmspvadv
   STAGE:
     Type: String
     AllowedValues:
       - dev
-      - poc
       - stg
       - prd
+      - poc
     Default: dev
+  PROJECT:
+    Type: String
+    Default: spvadv
+
+Mappings:
+  Cors:
+    dev:
+      Origin: "*"
+      Headers: "*"
+      Methods: "OPTIONS,GET,POST,PUT,DELETE"
+    stg:
+      Origin: "*"
+      Headers: "*"
+      Methods: "OPTIONS,GET,POST,PUT,DELETE"
+    prd:
+      Origin: "*"
+      Headers: "*"
+      Methods: "OPTIONS,GET,POST,PUT,DELETE"
+    poc:
+      Origin: "*"
+      Headers: "*"
+      Methods: "OPTIONS,GET,POST,PUT,DELETE"
+  Region:
+    dev:
+      Region: eu-central-1
+    stg:
+      Region: eu-west-1
+    prd:
+      Region: eu-west-1
+    poc:
+      Region: eu-west-1
+  CloudFrontDomain:
+    dev:
+      DomainName: "https://web.yamaha-motor-bicycle-dev.com/"
+    stg:
+      DomainName: "https://faq.stg.yamaha-motor-e-bike-connected.com/"
+    prd:
+      DomainName: "https://faq.yamaha-motor-e-bike-connected.com/"
+    poc:
+      DomainName: "https://faq.poc-spvadv.com/"
+
+  AuroraSecretManagerParameters:
+    dev:
+      Arn: arn:aws:secretsmanager:eu-central-1:919812727183:secret:dev-spvadv-secret-aurora-serverless-gFWh8c
+      Name: dev-spvadv-secret-aurora-serverless
+      Region: eu-central-1
+    stg:
+      Arn: arn:aws:secretsmanager:eu-west-1:623490809465:secret:stg-spvadv-secret-aurora-serverless-oDko8C
+      Name: stg-spvadv-secret-aurora-serverless
+      Region: eu-west-1
+    prd:
+      Arn: arn:aws:secretsmanager:eu-west-1:855931087436:secret:prd-spvadv-secret-aurora-serverless-j6ZMyZ
+      Name: prd-spvadv-secret-aurora-serverless
+      Region: eu-west-1
+    poc:
+      Arn: arn:aws:secretsmanager:eu-west-1:919812727183:secret:poc-spvadv-secret-aurora-serverless-yqox5L
+      Name: poc-spvadv-secret-aurora-serverless
+      Region: eu-west-1
+
+  DynamoDbParameters:
+    dev:
+      Arn: arn:aws:dynamodb:eu-central-1:919812727183:table/*
+    stg:
+      Arn: arn:aws:dynamodb:eu-west-1:623490809465:table/*
+    prd:
+      Arn: arn:aws:dynamodb:eu-west-1:855931087436:table/*
+    poc:
+      Arn: arn:aws:dynamodb:eu-west-1:919812727183:table/*
+
+  LambdaParametersSubnet:
+    dev:
+      SecurityGroupId: sg-06b1a6358d890a852
+      SubnetIds1: subnet-050b32d0409fe3ae7
+      SubnetIds2: subnet-0e36cb6419e7d99d7
+    stg:
+      SecurityGroupId: sg-0bf3f89e1ce917469
+      SubnetIds1: subnet-0d723f1fcbaad6909
+      SubnetIds2: subnet-02fc18bd5e3703eb4
+    prd:
+      SecurityGroupId: sg-0dccbe5b7baed0dbc
+      SubnetIds1: subnet-09e3e0d1823ca90b3
+      SubnetIds2: subnet-0e6ffc4215bca1c44
+    poc:
+      SecurityGroupId: sg-0fe816005e0e04cd9
+      SubnetIds1: subnet-0026674e7057fb6f2
+      SubnetIds2: subnet-042c2b45f29a3aa9b
+
+  # GigyaProxySetting:
+  #   dev:
+  #     Address: ""
+  #   stg:
+  #     Address: ""
+  #   prd:
+  #     Address: ""
+
+  ApiParameters:
+    dev:
+      version: v1
+      ApiArn: arn:aws:execute-api:eu-central-1:919812727183:*/*/*
+      VpcEndpointId: vpce-0de7bec8d40ea0273
+    stg:
+      version: v1
+      ApiArn: arn:aws:execute-api:eu-west-1:623490809465:*/*/*
+      VpcEndpointId: vpce-03842cc9fa77ce941
+    prd:
+      version: v1
+      ApiArn: arn:aws:execute-api:eu-west-1:855931087436:*/*/*
+      VpcEndpointId: vpce-03842cc9fa77ce941
+    poc:
+      version: v1
+      ApiArn: arn:aws:execute-api:eu-west-1:919812727183:*/*/*
+      VpcEndpointId: vpce-0dfc31c9e69221789
+
+Conditions:
+  IsDev: !Equals [!Ref STAGE, "dev"]
 
 Globals:
   Function:
     Runtime: python3.9
-    Timeout: 30
-    MemorySize: 1024
-    Architectures:
-      - arm64
+    Timeout: 27
+    MemorySize: 512
+    Layers:
+      - !Ref LayerCommon
+      - !Ref LayerRepository
+      - !Ref LayerService
+    Environment:
+      Variables:
+        STAGE: !Ref STAGE
+        APIGW_RESOURCE: !FindInMap [ ApiParameters, !Ref STAGE, ApiArn]
+        CORS_ORIGIN: !FindInMap [ Cors, !Ref STAGE, Origin]
+        CORS_HEADERS: !FindInMap [ Cors, !Ref STAGE, Headers ]
+        CORS_METHODS: !FindInMap [ Cors, !Ref STAGE, Methods ]
+        AURORA_SECRET_MANAGER_NAME: !FindInMap [ AuroraSecretManagerParameters, !Ref STAGE, Name ]
+        AURORA_SECRET_MANAGER_REGION: !FindInMap [ AuroraSecretManagerParameters, !Ref STAGE, Region ]
+        REGION: !FindInMap [ Region, !Ref STAGE, Region ]
+        CLOUD_FRONT_DOMAIN_NAME: !FindInMap [ CloudFrontDomain, !Ref STAGE, DomainName ]
+    VpcConfig:
+      SecurityGroupIds:
+        - !FindInMap [ LambdaParametersSubnet, !Ref STAGE, SecurityGroupId ]
+      SubnetIds:
+        - !FindInMap [ LambdaParametersSubnet, !Ref STAGE, SubnetIds1 ]
+          # Auroraの都合でマルチAZにしているが、subnet2の方はエンドポイントついてないのでDynamoDBとか見に行けない
+          # - !FindInMap [ LambdaParametersSubnet, !Ref STAGE, SubnetIds2 ]
+    Tags:
+      cloudpack_datadog: "enabled"
+      ams_target_url_vars: "https://plusev-eu.yamaha-motorcycle-connect.com/"
+      Env: !Ref STAGE
+      Project: !Ref PROJECT
+
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,GET,POST'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
 
 Resources:
-#########################
-#        Lambda         #
-#########################
-# IAM Role
-# ログイン関数他
-  LambdaSessionRole:
-    Type: AWS::IAM::Role
+#  ### API定義 開始
+  # API GW
+  ApiYamaha:
+    Type: AWS::Serverless::Api
     Properties:
-      RoleName: !Sub "${ProjectName}-${STAGE}-session-lambda-role"
+      Name: !Sub '${STAGE}-${PROJECT}-api'
+      StageName: !FindInMap [ ApiParameters, !Ref STAGE, version ]
+      Auth:
+        ApiKeyRequired: false
+        DefaultAuthorizer: ApiLambdaAuthorizer
+        Authorizers:
+          ApiLambdaAuthorizer:
+            FunctionPayloadType: REQUEST
+            FunctionArn: !GetAtt LambdaAuthorizer.Arn
+            Identity:
+              ReauthorizeEvery: 0
+        AddDefaultAuthorizerToCorsPreflight: False
+        ResourcePolicy:
+          CustomStatements: [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "execute-api:Invoke",
+              "Resource": ["execute-api:/*"]
+            }
+          ]
+      MethodSettings:
+        - DataTraceEnabled: True
+          LoggingLevel: 'INFO'
+          HttpMethod: '*'
+          ResourcePath: '/*'
+          MetricsEnabled: True
+      EndpointConfiguration:
+        Type: PRIVATE
+        VPCEndpointIds:
+          - !FindInMap [ ApiParameters, !Ref STAGE, VpcEndpointId ]
+      Tags:
+        cloudpack_datadog: "enabled"
+        ams_target_url_vars: "https://plusev-eu.yamaha-motorcycle-connect.com/"
+        Env: !Ref STAGE
+        Project: !Ref PROJECT
+
+  IAMRoleAPILogs:
+    Type: AWS::IAM::Role
+    Description: "API Gatewayのログ出力用ロールを作成する"
+    Properties:
+      RoleName: !Sub "${STAGE}-${PROJECT}-iamrole-apigw-logs"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
+              Service:
+                - "apigateway.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+  ApiYamahaAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt IAMRoleAPILogs.Arn
+  ApiKeyYamaha:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: !Sub "${STAGE}-${PROJECT}-apikey"
+      Enabled: true
+      StageKeys:
+        - RestApiId: !Ref ApiYamaha
+          StageName: !FindInMap [ ApiParameters, !Ref STAGE, version ]
+    DependsOn:
+      - ApiYamaha
+      - ApiYamahaStage
+  ApiYamahaUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+        - ApiId: !Ref ApiYamaha
+          Stage: !FindInMap [ ApiParameters, !Ref STAGE, version ]
+      UsagePlanName: !Sub "${STAGE}-${PROJECT}-apikey-usage-plan"
+    DependsOn:
+      - ApiYamaha
+      - ApiYamahaStage
+  ApiYamahaUsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref ApiKeyYamaha
+      KeyType: API_KEY
+      UsagePlanId: !Ref ApiYamahaUsagePlan
+    DependsOn:
+      - ApiYamaha
+      - ApiYamahaUsagePlan
+
+
+  # レイヤー定義
+  LayerCommon:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: common layer
+      ContentUri: './src/layers/common/python/'
+      RetentionPolicy: Retain
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+  LayerRepository:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: repository layer
+      ContentUri: './src/layers/repository/python/'
+      RetentionPolicy: Retain
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+  LayerService:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: repository layer
+      ContentUri: './src/layers/service/python/'
+      RetentionPolicy: Retain
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+
+
+  # API lambda定義
+  # Lambda共通ロール
+  IAMRoleLambda:
+    Type: AWS::IAM::Role
+    Description: "API GW lambdaのロール"
+    Properties:
+      RoleName: !Sub "${STAGE}-${PROJECT}-iamrole-lambda"
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
-        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
       Policies:
-        - PolicyName: DefaultLambdaPolicy
+        - PolicyName: !Sub "${STAGE}-${PROJECT}-iampolicy-lambda"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
+              # - Effect: Allow
+              #   Action:
+              #     - "rds-db:*"
+              #   Resource: "*"
               - Effect: Allow
-                Action: logs:*
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource:
+                  - !FindInMap [ AuroraSecretManagerParameters, !Ref STAGE, Arn ]
+              - Effect: "Allow"
+                Action:
+                  - "dynamodb:BatchGetItem"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                  - "dynamodb:BatchWriteItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:UpdateItem"
+                Resource:
+                  - !FindInMap [ DynamoDbParameters, !Ref STAGE, Arn ]
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:DeleteObject"
+                Resource:
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-maintaince-items",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-maintaince-items",
+                  ]
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-maintaince-items/*",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-maintaince-items/*",
+                  ]
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-upload-items",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-upload-items",
+                  ]
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-upload-items/*",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-upload-items/*",
+                  ]
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-unexpected-data",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-unexpected-data",
+                  ]
+                  - !If [
+                    IsDev,
+                    !Sub "arn:aws:s3:::${STAGE}-${PROJECT}-s3-bucket-eu-central-1-unexpected-data/*",
+                    !Sub "arn:aws:s3:::${STAGE}-spvadv-unexpected-data/*",
+                  ]
+              - Effect: "Allow"
+                Action:
+                  - "s3:ListAllMyBuckets"
                 Resource: "*"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
 
-# ログイン関数  
-  SessionFunction:
+  # Authorize
+  LambdaAuthorizer:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "${ProjectName}-${STAGE}-session-function"
-      Handler: session.lambda_handler
-      Role: !GetAtt LambdaSessionRole.Arn
-      CodeUri: src/lambdas/functions/session
-      Environment:
-        Variables:
-          USERTABLE: "m_user"
-          SESSIONTABLE: "t_session"
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-authorizer"
+      CodeUri: ./src/functions/authorizer
+      Handler: handler.handler
+      Description: "Authorizer"
+      Role: !GetAtt IAMRoleLambda.Arn
 
-  Session2Function:
+  # ログイン
+  LambdaLoginPost:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "${ProjectName}-${STAGE}-session2-function"
-      Handler: session.lambda_handler
-      Role: !GetAtt LambdaSessionRole.Arn
-      CodeUri: src/lambdas/functions/session
-      Environment:
-        Variables:
-          USERTABLE: "m_user"
-          SESSIONTABLE: "t_session"
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-login-post"
+      CodeUri: src/functions/login
+      Handler: post_handler.handler
+      Description: "ログインAPI"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /login
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              Authorizer: 'NONE'
+              ApiKeyRequired: true
+
+  # ログアウト
+  LambdaLogoutPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-logout-post"
+      CodeUri: src/functions/logout
+      Handler: post_handler.handler
+      Description: "ログアウトAPI"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /logout
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # # デバイストークン登録更新
+  # LambdaDeviceTokenPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-device-token-post"
+  #     CodeUri: src/functions/device
+  #     Handler: post_handler.handler
+  #     Description: "デバイストークン登録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /device-token
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ユーザー設定情報取得
+  # LambdaUserSettingGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-user-setting-get"
+  #     CodeUri: src/functions/user_setting
+  #     Handler: get_handler.handler
+  #     Description: "ユーザー設定情報取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /users/settings
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ユーザーライド設定登録更新
+  # LambdaUsersSettingsUserRidePut:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-users-settings-user-ride-put"
+  #     CodeUri: src/functions/users_settings_user_ride
+  #     Handler: put_handler.handler
+  #     Description: "ユーザーライド設定登録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: put
+  #           Path: /users/settings/user-ride
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ユーザー普段利用店舗登録更新
+  # LambdaUsersSettingsShopPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-users-settings-shop-post"
+  #     CodeUri: src/functions/users_settings_shop
+  #     Handler: post_handler.handler
+  #     Description: "ユーザー普段利用店舗登録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /users/settings/shop
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # ユーザ車両設定一覧取得
+  LambdaVehiclesGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-get"
+      CodeUri: src/functions/vehicles
+      Handler: get_handler.handler
+      Description: "ユーザ車両設定一覧取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /vehicles
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # 車両設定登録
+  LambdaVehiclesPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-post"
+      CodeUri: src/functions/vehicles
+      Handler: post_handler.handler
+      Description: "車両設定登録API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /vehicles
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # 車両設定更新
+  LambdaVehiclesPut:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-put"
+      CodeUri: src/functions/vehicles
+      Handler: put_handler.handler
+      Description: "車両設定更新API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: put
+            Path: /vehicles/{user_vehicle_id}
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # 車両設定削除
+  LambdaVehiclesDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-delete"
+      CodeUri: src/functions/vehicles
+      Handler: delete_handler.handler
+      Description: "車両設定削除API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: delete
+            Path: /vehicles/{user_vehicle_id}
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # # bluetooth接続切断
+  # LambdaVehiclesBluetoothPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-bluetooth-post"
+  #     CodeUri: src/functions/vehicles_bluetooth
+  #     Handler: post_handler.handler
+  #     Description: "bluetooth接続切断API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /vehicles/{user_vehicle_id}/bluetooth
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ユーザー購入店舗登録更新
+  # LambdaVehiclesShopPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-shop-post"
+  #     CodeUri: src/functions/vehicles_shop
+  #     Handler: post_handler.handler
+  #     Description: "ユーザー購入店舗登録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /vehicles/{user_vehicle_id}/shop
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス設定登録更新
+  # LambdaVehiclesMaintenanceSetting:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenance-setting-post"
+  #     CodeUri: src/functions/vehicles_maintenance_setting
+  #     Handler: post_handler.handler
+  #     Description: "メンテナンス設定登録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /vehicles/{user_vehicle_id}/maintenance-setting
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ライド一覧取得
+  # LambdaRidesGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-rides-get"
+  #     CodeUri: src/functions/rides
+  #     Handler: get_handler.handler
+  #     Description: "ライド一覧取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /rides
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ライド詳細取得
+  # LambdaRidesDetailGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-ride-detail-get"
+  #     CodeUri: src/functions/ride_detail
+  #     Handler: get_handler.handler
+  #     Description: "ライド詳細取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /rides/{ride_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ユーザーライドデータ送信
+  # LambdaRidesPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-rides-post"
+  #     CodeUri: src/functions/rides
+  #     Handler: post_handler.handler
+  #     Description: "ユーザーライドデータ送信API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /rides
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ライド詳細更新
+  # LambdaRidesDetailPut:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-ride-detail-put"
+  #     CodeUri: src/functions/ride_detail
+  #     Handler: put_handler.handler
+  #     Description: "ライド詳細更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: put
+  #           Path: /rides/{ride_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # ライド詳細削除
+  # LambdaRidesDetailDelete:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-ride-detail-delete"
+  #     CodeUri: src/functions/ride_detail
+  #     Handler: delete_handler.handler
+  #     Description: "ライド詳細削除API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: delete
+  #           Path: /rides/{ride_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス指示一覧取得
+  # LambdaVehiclesMaintenancesGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenances-get"
+  #     CodeUri: src/functions/vehicles_maintenances
+  #     Handler: get_handler.handler
+  #     Description: "メンテナンス指示一覧取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /vehicles/{user_vehicle_id}/maintenances
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス指示詳細取得
+  # LambdaMaintenancesGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-maintenances-get"
+  #     CodeUri: src/functions/maintenances
+  #     Handler: get_handler.handler
+  #     Description: "メンテナンス指示詳細取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /maintenances/{model_code}/{maintain_item_code}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス記録登録
+  # LambdaVehiclesMaintenancesHistoriesDetailPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenances_histories_detail-post"
+  #     CodeUri: src/functions/vehicles_maintenances_histories_detail
+  #     Handler: post_handler.handler
+  #     Description: "メンテナンス記録登録API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /vehicles/{user_vehicle_id}/maintenances/histories
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス記録更新
+  # LambdaVehiclesMaintenancesHistoriesDetailPut:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenances_histories_detail-put"
+  #     CodeUri: src/functions/vehicles_maintenances_histories_detail
+  #     Handler: put_handler.handler
+  #     Description: "メンテナンス記録更新API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: put
+  #           Path: /vehicles/{user_vehicle_id}/maintenances/histories/{maintain_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス記録削除
+  # LambdaVehiclesMaintenancesHistoriesDetailDelete:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenances_histories_detail-delete"
+  #     CodeUri: src/functions/vehicles_maintenances_histories_detail
+  #     Handler: delete_handler.handler
+  #     Description: "メンテナンス記録削除API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: delete
+  #           Path: /vehicles/{user_vehicle_id}/maintenances/histories/{maintain_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス履歴一覧取得
+  # LambdaVehiclesMaintenancesHistoriesGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenance-hisotries-get"
+  #     CodeUri: src/functions/vehicles_maintenances_histories
+  #     Handler: get_handler.handler
+  #     Description: "メンテナンス履歴一覧取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /vehicles/{user_vehicle_id}/maintenances/histories
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # メンテナンス履歴詳細取得
+  # LambdaVehiclesMaintenancesHistoriesDetailGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-maintenances_histories_detail_get"
+  #     CodeUri: src/functions/vehicles_maintenances_histories_detail
+  #     Handler: get_handler.handler
+  #     Description: "メンテナンス履歴詳細取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /vehicles/{user_vehicle_id}/maintenances/histories/{maintain_history_id}
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # 車種マスタ取得
+  LambdaVehiclesModelCodesGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-vehicles-model-codes-get"
+      CodeUri: src/functions/model_codes
+      Handler: get_handler.handler
+      Description: "車種マスタ取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /model_codes
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ユーザ情報取得
+  LambdaUserInfoGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-user-info-get"
+      CodeUri: src/functions/user
+      Handler: get_handler.handler
+      Description: "ユーザ情報取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /user
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ユーザ情報登録更新
+  LambdaUserInfoPut:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-user-info-put"
+      CodeUri: src/functions/user
+      Handler: put_handler.handler
+      Description: "ユーザ情報更新API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: put
+            Path: /user
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ルート一覧取得
+  LambdaRouteListGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-route-list-get"
+      CodeUri: src/functions/route_list
+      Handler: get_handler.handler
+      Description: "ルート一覧取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /route
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ルート取得
+  LambdaRouteGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-route-get"
+      CodeUri: src/functions/route
+      Handler: get_handler.handler
+      Description: "ルート取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /route/{route_id}
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ルート登録
+  LambdaRoutePost:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-route-post"
+      CodeUri: src/functions/route
+      Handler: post_handler.handler
+      Description: "ルート登録API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /route
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ルート更新
+  LambdaRoutePut:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-route-put"
+      CodeUri: src/functions/route
+      Handler: put_handler.handler
+      Description: "ルート更新API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: put
+            Path: /route/{route_id}
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # ルート削除
+  LambdaRouteDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-route-delete"
+      CodeUri: src/functions/route
+      Handler: delete_handler.handler
+      Description: "ルート削除API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: delete
+            Path: /route/{route_id}
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # スポット取得
+  LambdaSpotGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-spot-get"
+      CodeUri: src/functions/spot
+      Handler: get_handler.handler
+      Description: "スポット取得API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /spot
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  #  ワークアウト登録
+  LambdaWorkoutPut:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-workout-put"
+      CodeUri: src/functions/workout
+      Handler: put_handler.handler
+      Description: "ワークアウト登録API"
+      Role: !GetAtt IAMRoleLambda.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: put
+            Path: /workout
+            RestApiId: !Ref ApiYamaha
+            Auth:
+              ApiKeyRequired: true
+
+  # # 画像アップロードURL取得
+  # LambdaUploadUrlsGet:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-upload-urls-get"
+  #     CodeUri: src/functions/upload_urls
+  #     Handler: get_handler.handler
+  #     Description: "画像アップロードURL取得API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: get
+  #           Path: /upload_urls
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # # Bluetooth異常データ送信
+  # LambdaBluetoothUnexpectedDataPost:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-bluetooth-unexpected-data-post"
+  #     CodeUri: src/functions/bluetooth_unexpected_data
+  #     Handler: post_handler.handler
+  #     Description: "Bluetooth異常データ送信API"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ApiEvent:
+  #         Type: Api
+  #         Properties:
+  #           Method: post
+  #           Path: /bluetooth_unexpected_data
+  #           RestApiId: !Ref ApiYamaha
+  #           Auth:
+  #             ApiKeyRequired: true
+
+  # Dynamodb登録
+  InsertDynamodb:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-insert-dynamodb"
+      CodeUri: src/functions/insert_dynamodb
+      Handler: handler.handler
+      Description: "Dynamodb登録用"
+      Role: !GetAtt IAMRoleLambda.Arn
+
+  # # アプリバージョン情報取得バッチ処理
+  # LambdaCollectAppVersion:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-collect-app-version"
+  #     CodeUri: src/batch_functions/app_version_check
+  #     Handler: handler.handler
+  #     Description: "アプリバージョン情報取得バッチ処理"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Events:
+  #       ScheduledCollectAppVersion:
+  #         Type: Schedule
+  #         Properties:
+  #           Name: !Sub "${STAGE}-${PROJECT}-lambda-collect-app-version"
+  #           Description: "アプリバージョン情報取得バッチ処理"
+  #           Schedule: cron(00 6,18 * * ? *)
+  #           Enabled: true
+  #     Timeout: 900
+
+  # # 登録済ファイルリスト取得
+  # LambdaGetDeleteFileList:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-get-delete-file-list"
+  #     CodeUri: src/batch_functions/files_deletion
+  #     Handler: get_list_handler.handler
+  #     Description: "登録済ファイルリスト取得バッチ処理"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Timeout: 900
+
+  # # ファイル削除
+  # LambdaDeleteFiles:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-delete-file"
+  #     CodeUri: src/batch_functions/files_deletion
+  #     Handler: delete_files_handler.handler
+  #     Description: "ファイル削除バッチ処理"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Timeout: 900
+
+  # # メンテナンス通知対象取得
+  # LambdaGetMaintenanceList:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-get-maintenance-list"
+  #     CodeUri: src/batch_functions/maintenance_notification
+  #     Handler: get_list_handler.handler
+  #     Description: "メンテナンス通知対象取得バッチ処理"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Timeout: 900
+
+  # # メンテナンス通知リクエスト
+  # LambdaRequestMaintenanceNotification:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     FunctionName: !Sub "${STAGE}-${PROJECT}-lambda-request-maintenance-notification"
+  #     CodeUri: src/batch_functions/maintenance_notification
+  #     Handler: request_notifications_handler.handler
+  #     Description: "メンテナンス通知リクエストバッチ処理"
+  #     Role: !GetAtt IAMRoleLambda.Arn
+  #     Timeout: 900
+
+  # # SteteMachineロール
+  # IAMRoleState:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     RoleName: !Sub "${STAGE}-${PROJECT}-iamrole-state"
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: "Allow"
+  #           Principal:
+  #             Service:
+  #               - states.amazonaws.com
+  #           Action: "sts:AssumeRole"
+  #     Policies:
+  #       - PolicyName: !Sub "${STAGE}-${PROJECT}-iampolicy-state"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - "lambda:InvokeFunction"
+  #               Resource:
+  #                 - "arn:aws:lambda:eu-west-1:517881718180:function:*"
+
+  # StateMachineDeleteFiles:
+  #   Type: AWS::Serverless::StateMachine
+  #   Properties:
+  #     Role: !GetAtt IAMRoleState.Arn
+  #     Definition:
+  #       StartAt: ListCreateState
+  #       States:
+  #         ListCreateState:
+  #           Type: Task
+  #           Resource: !GetAtt LambdaGetDeleteFileList.Arn
+  #           ResultPath: $
+  #           Next: MapState
+  #         MapState:
+  #           Type: Map
+  #           ItemsPath: $.file_id_list
+  #           Iterator:
+  #             StartAt: IteratorState
+  #             States:
+  #               IteratorState:
+  #                 Type: Task
+  #                 Resource: !GetAtt LambdaDeleteFiles.Arn
+  #                 End: true
+  #           End: true
+  #     Events:
+  #       ScheduledDeleteFiles:
+  #         Type: Schedule
+  #         Properties:
+  #           Name: !Sub "${STAGE}-${PROJECT}-lambda-delete-file"
+  #           Description: "ファイル削除バッチ処理"
+  #           Schedule: cron(00 18 * * ? *)
+  #           Enabled: true
+
+  # StateMachineMaintenanceNotification:
+  #   Type: AWS::Serverless::StateMachine
+  #   Properties:
+  #     Role: !GetAtt IAMRoleState.Arn
+  #     Definition:
+  #       StartAt: ListCreateState
+  #       States:
+  #         ListCreateState:
+  #           Type: Task
+  #           Resource: !GetAtt LambdaGetMaintenanceList.Arn
+  #           ResultPath: $
+  #           Next: MapState
+  #         MapState:
+  #           Type: Map
+  #           ItemsPath: $.maintenance_notification_list
+  #           Iterator:
+  #             StartAt: IteratorState
+  #             States:
+  #               IteratorState:
+  #                 Type: Task
+  #                 Resource: !GetAtt LambdaRequestMaintenanceNotification.Arn
+  #                 End: true
+  #           End: true
+  #     Events:
+  #       ScheduledRequestMaintenanceNotification:
+  #         Type: Schedule
+  #         Properties:
+  #           Name: !Sub "${STAGE}-${PROJECT}-lambda-request-maintenance-notification"
+  #           Description: "メンテナンス通知リクエストバッチ処理"
+  #           Schedule: cron(00 11 * * ? *)
+  #           Enabled: true
