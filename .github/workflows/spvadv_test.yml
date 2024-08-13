@@ -57,5 +57,4 @@ jobs:
           export AWS_DEFAULT_REGION=${{ env.REGION }}
           echo 'REGION is set to:'
           echo ${{ env.REGION }}
-          docker-compose -v
           pipenv run ut
