@@ -3,9 +3,9 @@ version = 0.1
 [dev]
 [dev.deploy]
 [dev.deploy.parameters]
-stack_name = "dev-spvadv-stack-km"
-s3_bucket = "dev-kmspvadv-s3-bucket-eu-central-1-deploy-artifact"
-s3_prefix = "dev-spvadv-stack-km"
+stack_name = "dev-spvadv-stack"
+s3_bucket = "dev-spvadv-s3-bucket-eu-central-1-deploy-artifact"
+s3_prefix = "dev-spvadv-stack"
 region = "eu-central-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_NAMED_IAM"
@@ -15,9 +15,9 @@ parameter_overrides = "STAGE=\"dev\" PROJECT=\"spvadv\""
 [poc]
 [poc.deploy]
 [poc.deploy.parameters]
-stack_name = "poc-spvadv-stack-km"
-s3_bucket = "poc-kmspvadv-s3-deploy-artifact"
-s3_prefix = "poc-spvadv-stack-km"
+stack_name = "poc-spvadv-stack"
+s3_bucket = "poc-spvadv-s3-deploy-artifact"
+s3_prefix = "poc-spvadv-stack"
 region = "eu-west-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_NAMED_IAM"
@@ -51,9 +51,9 @@ parameter_overrides = "STAGE=\"prd\" PROJECT=\"spvadv\""
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "dev-spvadv-stack-km"
+stack_name = "dev-spvadv-stack"
 s3_bucket = "dev-spvadv-s3-deploy-artifact"
-s3_prefix = "dev-spvadv-stack-km"
+s3_prefix = "dev-spvadv-stack"
 region = "eu-central-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_NAMED_IAM"

@@ -1,0 +1,30 @@
+DROP TABLE IF EXISTS spvadv.t_drive_unit_history;
+CREATE TABLE spvadv.t_drive_unit_history (
+  user_vehicle_id int NOT NULL,
+  du_first_timestamp timestamp(3) without time zone NOT NULL,
+  du_last_timestamp timestamp(3) without time zone DEFAULT '9999-12-31 23:59:59.999'  NOT NULL,
+  gigya_uid varchar(50) NOT NULL,
+  du_serial_number varchar(50) NOT NULL,
+  du_first_odometer int NOT NULL,
+  du_last_odometer int DEFAULT 0 NOT NULL,
+  fcdyobi1 varchar(10),
+  fcdyobi2 varchar(10),
+  fcdyobi3 varchar(10),
+  fcdyobi4 varchar(10),
+  fcdyobi5 varchar(10),
+  etxyobi1 varchar(50),
+  etxyobi2 varchar(50),
+  etxyobi3 varchar(50),
+  etxyobi4 varchar(50),
+  etxyobi5 varchar(50),
+  delete_flag boolean DEFAULT false,
+  delete_timestamp timestamp(3) without time zone,
+  delete_user_id varchar(50),
+  insert_timestamp timestamp(3) without time zone,
+  insert_user_id varchar(50),
+  update_timestamp timestamp(3) without time zone,
+  update_user_id varchar(50),
+  PRIMARY KEY (user_vehicle_id, du_first_timestamp),
+  FOREIGN KEY (user_vehicle_id) REFERENCES spvadv.t_user_vehicle(user_vehicle_id)
+);
+CREATE INDEX ON spvadv.t_drive_unit_history(gigya_uid, user_vehicle_id);

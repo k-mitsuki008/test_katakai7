@@ -1,0 +1,29 @@
+{
+    // Code Spell Checker
+    // Python
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": false
+        },
+    },
+    // テスト
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "backend",
+        "-vv",
+        // covオプションを設定するとテスト時にデバッグができなくなる(https://github.com/microsoft/vscode-python/issues/693)
+        // "--cov",
+        // "--cov-report=html",
+    ],
+    "editor.formatOnSave": true,
+    // プロジェクト固有の設定
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src/layers/common/python",
+        "${workspaceFolder}/src/layers/repository/python",
+        "${workspaceFolder}/src/layers/service/python"
+    ],
+    "python.envFile": "${workspaceFolder}/.env",
+}

@@ -1,0 +1,975 @@
+{
+    "Items": [
+        {
+            "value": {
+                "S": "00"
+            },
+            "code": {
+                "S": "BATTERY_REMIND_CD"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "N": "35.681236"
+            },
+            "code": {
+                "S": "BATTERY_REMIND_SPOT_LATITUDE"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "N": "139.767125"
+            },
+            "code": {
+                "S": "BATTERY_REMIND_SPOT_LONGITUDE"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": true
+            },
+            "code": {
+                "S": "BATTERY_REMIND_VOICE_NOTICE"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": false
+            },
+            "code": {
+                "S": "BOOKMARK_FLG"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "S": "03"
+            },
+            "code": {
+                "S": "HOME_ASSIST_MODE_NUMBER"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": true
+            },
+            "code": {
+                "S": "LONG_DRIVE_ALERT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": true
+            },
+            "code": {
+                "S": "MAINTAIN_ITEM_ALERT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "N": "0"
+            },
+            "code": {
+                "S": "MAINTAIN_ITEM_ALERT_STATUS"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "MAINTENANCE_CONSCIOUSNESS"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "N": "0"
+            },
+            "code": {
+                "S": "MAINTENANCE_NOTIFICATION_TARGET"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "N": "500"
+            },
+            "code": {
+                "S": "NOTIFICATION_LIMIT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": false
+            },
+            "code": {
+                "S": "NO_LIGHT_ALERT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": false
+            },
+            "code": {
+                "S": "SAFETY_RIDE_ALERT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": true
+            },
+            "code": {
+                "S": "SAFETY_RIDE_VOICE_NOTICE"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "BOOL": true
+            },
+            "code": {
+                "S": "SPEED_OVER_ALERT"
+            },
+            "category_cd": {
+                "S": "INIT_VALUE"
+            }
+        },
+        {
+            "value": {
+                "S": "android"
+            },
+            "code": {
+                "S": "ANDROID"
+            },
+            "category_cd": {
+                "S": "OS_KIND"
+            }
+        },
+        {
+            "value": {
+                "S": "ios"
+            },
+            "code": {
+                "S": "IOS"
+            },
+            "category_cd": {
+                "S": "OS_KIND"
+            }
+        },
+        {
+            "value": {
+                "S": "com.yamaha.buddy.app.dev"
+            },
+            "code": {
+                "S": "ANDROID_PKG_NAME"
+            },
+            "category_cd": {
+                "S": "APP_INFO"
+            }
+        },
+        {
+            "value": {
+                "S": "alpha"
+            },
+            "code": {
+                "S": "ANDROID_TRACK"
+            },
+            "category_cd": {
+                "S": "APP_INFO"
+            }
+        },
+        {
+            "value": {
+                "N": "7"
+            },
+            "code": {
+                "S": "EXPIRATION_DELTA"
+            },
+            "category_cd": {
+                "S": "APP_INFO"
+            }
+        },
+        {
+            "value": {
+                "N": "7"
+            },
+            "code": {
+                "S": "IOS_APP_ID"
+            },
+            "category_cd": {
+                "S": "APP_INFO"
+            }
+        },
+        {
+            "value": {
+                "N": "2"
+            },
+            "code": {
+                "S": "IMAGE"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_EXPLANATION_TYPE"
+            }
+        },
+        {
+            "value": {
+                "N": "1"
+            },
+            "code": {
+                "S": "STRING"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_EXPLANATION_TYPE"
+            }
+        },
+        {
+            "value": {
+                "S": "2"
+            },
+            "code": {
+                "S": "FAILED"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_ALERT_STATUS"
+            }
+        },
+        {
+            "value": {
+                "S": "1"
+            },
+            "code": {
+                "S": "NOTIFIED"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_ALERT_STATUS"
+            }
+        },
+        {
+            "value": {
+                "S": "0"
+            },
+            "code": {
+                "S": "UNNOTIFIED"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_ALERT_STATUS"
+            }
+        },
+        {
+            "value": {
+                "S": "11"
+            },
+            "code": {
+                "S": "GOOGLE_MAP_2"
+            },
+            "category_cd": {
+                "S": "ROUTE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "12"
+            },
+            "code": {
+                "S": "GOOGLE_MAP_3"
+            },
+            "category_cd": {
+                "S": "ROUTE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "21"
+            },
+            "code": {
+                "S": "MAPBOX_2"
+            },
+            "category_cd": {
+                "S": "ROUTE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "ERRD"
+            },
+            "code": {
+                "S": "UNEXPECTED"
+            },
+            "category_cd": {
+                "S": "FILE_TYPE"
+            }
+        },
+        {
+            "value": {
+                "S": "02"
+            },
+            "code": {
+                "S": "PURCHASE"
+            },
+            "category_cd": {
+                "S": "SHOP_TYPE"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "REGULAR"
+            },
+            "category_cd": {
+                "S": "SHOP_TYPE"
+            }
+        },
+        {
+            "value": {
+                "N": "900"
+            },
+            "code": {
+                "S": "S3_URL_EXPIRES"
+            },
+            "category_cd": {
+                "S": "S3_URL_EXPIRES"
+            }
+        },
+        {
+            "value": {
+                "S": "11"
+            },
+            "code": {
+                "S": "OUTWARD"
+            },
+            "category_cd": {
+                "S": "ROUND_TRIP_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "12"
+            },
+            "code": {
+                "S": "RETURN"
+            },
+            "category_cd": {
+                "S": "ROUND_TRIP_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "10"
+            },
+            "code": {
+                "S": "ROUND_TRIP"
+            },
+            "category_cd": {
+                "S": "ROUND_TRIP_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "90"
+            },
+            "code": {
+                "S": "UNSELECTED"
+            },
+            "category_cd": {
+                "S": "ROUND_TRIP_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "IOS"
+            },
+            "category_cd": {
+                "S": "WORKOUT_DATA_SOURCE_KIND_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "10010"
+            },
+            "code": {
+                "S": "CHARGING"
+            },
+            "category_cd": {
+                "S": "SPOT_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "N": "5"
+            },
+            "code": {
+                "S": "MAX_VEHICLE_COUNT"
+            },
+            "category_cd": {
+                "S": "MAX_VEHICLE_COUNT"
+            }
+        },
+        {
+            "value": {
+                "S": "バッテリーリマインド通知設定CD"
+            },
+            "code": {
+                "S": "battery_remind_cd"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "バッテリーリマインド通知緯度"
+            },
+            "code": {
+                "S": "battery_remind_latitude"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "バッテリーリマインド通知経度"
+            },
+            "code": {
+                "S": "battery_remind_longitude"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "バッテリーリマインド音声通知"
+            },
+            "code": {
+                "S": "battery_remind_voice_notice"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "HOME設定アシストモード"
+            },
+            "code": {
+                "S": "home_assist_mode_number"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "長時間運転アラート"
+            },
+            "code": {
+                "S": "long_drive_alert"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "メンテナンス通知フラグリスト"
+            },
+            "code": {
+                "S": "maintain_alerts"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "日付"
+            },
+            "code": {
+                "S": "maintain_implement_date"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "メンテナンス部位通知フラグ"
+            },
+            "code": {
+                "S": "maintain_item_alert"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "メンテナンス項目CD"
+            },
+            "code": {
+                "S": "maintain_item_code"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "ライト無灯火アラート"
+            },
+            "code": {
+                "S": "no_light_alert"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "普段利用店舗名"
+            },
+            "code": {
+                "S": "regular_shop_name"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "セーフティライド通知"
+            },
+            "code": {
+                "S": "safety_ride_alert"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "セーフティライド音声通知"
+            },
+            "code": {
+                "S": "safety_ride_voice_notice"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "住所"
+            },
+            "code": {
+                "S": "shop_location"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "購入店舗名"
+            },
+            "code": {
+                "S": "shop_name"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "電話番号"
+            },
+            "code": {
+                "S": "shop_tel"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "制限速度超過アラート"
+            },
+            "code": {
+                "S": "speed_over_alert"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "号機番号"
+            },
+            "code": {
+                "S": "vehicle_id"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "車両名"
+            },
+            "code": {
+                "S": "vehicle_name"
+            },
+            "category_cd": {
+                "S": "FIELD_NAME"
+            }
+        },
+        {
+            "value": {
+                "S": "2023-01-01"
+            },
+            "code": {
+                "S": "MIN"
+            },
+            "category_cd": {
+                "S": "MAINTAIN_IMPLEMENT_DATE"
+            }
+        },
+        {
+            "value": {
+                "S": "02"
+            },
+            "code": {
+                "S": "DISTANCE"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "03"
+            },
+            "code": {
+                "S": "ROUTINE"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "TIME"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_TYPE_CODE"
+            }
+        },
+        {
+            "value": {
+                "N": "10"
+            },
+            "code": {
+                "S": "REQUEST_TIMEOUT"
+            },
+            "category_cd": {
+                "S": "TIMEOUT"
+            }
+        },
+        {
+            "value": {
+                "S": "explanation-images/"
+            },
+            "code": {
+                "S": "EXPLANATION"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET_PREFIX"
+            }
+        },
+        {
+            "value": {
+                "S": "icons/"
+            },
+            "code": {
+                "S": "ICON"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET_PREFIX"
+            }
+        },
+        {
+            "value": {
+                "S": "02"
+            },
+            "code": {
+                "S": "ECO"
+            },
+            "category_cd": {
+                "S": "ASSIST_MODE_NUMBER"
+            }
+        },
+        {
+            "value": {
+                "S": "05"
+            },
+            "code": {
+                "S": "EXPW"
+            },
+            "category_cd": {
+                "S": "ASSIST_MODE_NUMBER"
+            }
+        },
+        {
+            "value": {
+                "S": "04"
+            },
+            "code": {
+                "S": "HIGH"
+            },
+            "category_cd": {
+                "S": "ASSIST_MODE_NUMBER"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "PLUS_ECO"
+            },
+            "category_cd": {
+                "S": "ASSIST_MODE_NUMBER"
+            }
+        },
+        {
+            "value": {
+                "S": "03"
+            },
+            "code": {
+                "S": "STD"
+            },
+            "category_cd": {
+                "S": "ASSIST_MODE_NUMBER"
+            }
+        },
+        {
+            "value": {
+                "N": "14"
+            },
+            "code": {
+                "S": "SESSION_EXPIRES"
+            },
+            "category_cd": {
+                "S": "SESSION_EXPIRES"
+            }
+        },
+        {
+            "value": {
+                "S": "_top.png"
+            },
+            "code": {
+                "S": "SUFFIX"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_VEHICLE_IMAGE_SUFFIX"
+            }
+        },
+        {
+            "value": {
+                "S": "10"
+            },
+            "code": {
+                "S": "BURNING"
+            },
+            "category_cd": {
+                "S": "WORKOUT_MODE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "20"
+            },
+            "code": {
+                "S": "FREE"
+            },
+            "category_cd": {
+                "S": "WORKOUT_MODE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "30"
+            },
+            "code": {
+                "S": "LEARNING"
+            },
+            "category_cd": {
+                "S": "WORKOUT_MODE_CODE"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "HIGH"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_CONSCIOUSNESS"
+            }
+        },
+        {
+            "value": {
+                "S": "03"
+            },
+            "code": {
+                "S": "LOW"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_CONSCIOUSNESS"
+            }
+        },
+        {
+            "value": {
+                "S": "02"
+            },
+            "code": {
+                "S": "MIDDLE"
+            },
+            "category_cd": {
+                "S": "MAINTENANCE_CONSCIOUSNESS"
+            }
+        },
+        {
+            "value": {
+                "S": "spvc-{env}-maintenance-items/explanation-images"
+            },
+            "code": {
+                "S": "EXPLANATION"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET"
+            }
+        },
+        {
+            "value": {
+                "S": "spvc-{env}-maintenance-items/icons"
+            },
+            "code": {
+                "S": "ICON"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET"
+            }
+        },
+        {
+            "value": {
+                "S": "spvc-{env}-unexpected-data"
+            },
+            "code": {
+                "S": "UNEXPECTED"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET"
+            }
+        },
+        {
+            "value": {
+                "S": "spvc-{env}-upload-items"
+            },
+            "code": {
+                "S": "UPLOAD"
+            },
+            "category_cd": {
+                "S": "S3_BUCKET"
+            }
+        },
+        {
+            "value": {
+                "S": "02"
+            },
+            "code": {
+                "S": "ASSIST"
+            },
+            "category_cd": {
+                "S": "BATTERY_REMIND"
+            }
+        },
+        {
+            "value": {
+                "S": "01"
+            },
+            "code": {
+                "S": "LONG_LIFE"
+            },
+            "category_cd": {
+                "S": "BATTERY_REMIND"
+            }
+        },
+        {
+            "value": {
+                "S": "00"
+            },
+            "code": {
+                "S": "NO_NOTIFICATION"
+            },
+            "category_cd": {
+                "S": "BATTERY_REMIND"
+            }
+        }
+    ],
+    "Count": 88,
+    "ScannedCount": 88,
+    "ConsumedCapacity": null
+}
